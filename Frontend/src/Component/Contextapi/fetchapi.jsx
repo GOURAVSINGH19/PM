@@ -11,16 +11,17 @@ const Apidata = ({ children }) => {
     collage: "",
     department: "",
     BatchStart: "",
-    Batchend: "",
+    BatchEnd: "",
     github: "",
     linkdin: "",
     facultyname: "",
     projectstart: "",
     projectend: "",
-    ongoingproject:"",
+    ongoingproject:null,
     projecturl: "",
     researchtitle: "",
     researchdescription: "",
+    MentorEmail:""
   });
 
   return (

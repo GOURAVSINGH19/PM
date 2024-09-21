@@ -18,7 +18,8 @@ const UserinfoModel = new Schema(
     projectUrl: { type: String },
     researchtitle: { type: String },
     researchdescription: { type: String },
-    ongoingproject: { type: String },
+    ongoingproject: { type: Boolean },
+    MentorEmail: { type: String },
   },
   {
     timestamps: true,

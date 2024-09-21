@@ -2,12 +2,9 @@ import React, { useState } from "react";
 import Navbar from "./Navbar";
 import Cards from "./Cards/Cards";
 import Footer from "./Footer/Footer";
-import Dropdown from "./Dropdown/Dropdown";
 import bgimg from "../assets/bgimg.png";
 
 const Home = () => {
-  const [Category, setCategory] = useState("now_playing");
-
   return (
     <div className="w-screen h-screen  text-white overflow-x-hidden">
       <div className="w-screen h-80 bg-[#262344] relative">
@@ -22,7 +19,7 @@ const Home = () => {
           </p>
         </div>
       </div>
-      <div className="w-screen min-h-full  flex  gap-32 md:justify-between">
+      <div className="w-screen min-h-full  flex  md:justify-between">
         <Cards />
       </div>
       <Footer />

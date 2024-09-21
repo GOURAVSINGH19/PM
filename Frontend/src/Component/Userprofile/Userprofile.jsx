@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "../Navbar";
 import { Link } from "react-router-dom";
 import Footer from "../Footer/Footer";
-import Cards from "../Cards/Cards";
 import axios from "axios";
+import { trusted } from "mongoose";
 
 const items = [
   {
@@ -124,7 +123,7 @@ const pastdata = [
 
 const Userprogile = () => {
   const [users, setusers] = useState([]);
-  // const [pastitem, setpastdata] = useState(pastdata);
+  const [pastitem, setpastdata] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -133,8 +132,17 @@ const Userprogile = () => {
       const response = await axios.delete(
         `http://localhost:8000/info/Uploader/${itemId}`
       );
-      const data = (response) => response.filter((item) => item.id !== itemId);
-      setusers(data);
+      const data = response.data;
+      if (data.ongoingproject) {
+        await axios.put(`http://localhost:8000/info/Uploader/${itemId}`, {
+          ongoingproject: false,
+        });
+        const updatedusers = users.filter((item) => item._id !== itemId);
+        setusers(updatedusers);
+      } else {
+        const updatedPastData = pastitem.filter((item) => item._id !== itemId);
+        setpastdata(updatedPastData);
+      }
       setLoading(false);
     } catch (error) {
       console.error("Error removing card:", error);
@@ -147,7 +155,14 @@ const Userprogile = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get("http://localhost:8000/info/Uploader");
-        setusers(response.data);
+        const data = response.data;
+        console.log(data);
+        const ongoingUsers = data.filter(
+          (user) => user.ongoingproject === true
+        );
+        setusers(ongoingUsers);
+        const pastUsers = data.filter((user) => user.ongoingproject === false);
+        setpastdata(pastUsers);
         setLoading(false);
       } catch (error) {
         setError(error);
@@ -166,12 +181,14 @@ const Userprogile = () => {
         <div className="w-full">
           <div className=" w-full flex gap-5 items-center">
             <div className="w-20">
-              <div className="w-20 h-20 rounded-full bg-zinc-500"></div>
+              <div className="w-16 h-16 rounded-full bg-zinc-500"></div>
             </div>
             <div>
-              <h2 className=" text-2xl font-semibold">User Name</h2>
+              <h2 className=" text-2xl font-semibold">
+                {users.username ? users.username : "User Name"}
+              </h2>
               <p className="text-sm text-gray-400 mt-1">
-                Example User - 20 Projects
+                {users.collage ? users.collage : "Collage Name"}
               </p>
             </div>
           </div>
@@ -182,7 +199,7 @@ const Userprogile = () => {
             <h1 className="text-[2rem] lg:text-[3vw] text-zinc-600 capitalize font-serif">
               Ongoing Work
             </h1>
-            <div className=" w-full min-h-[25rem] lg:min-h-[30rem]  mt-4 overflow-hidden relative bg-[#2221211a] py-2 px-2">
+            <div className=" w-full min-h-[25rem] lg:min-h-[30rem]  mt-4 overflow-hidden relative  py-2 px-2">
               <div className="w-full flex gap-3  overflow-scroll">
                 {users.map((item, i) => (
                   <div key={i} className=" h-full">
@@ -235,12 +252,12 @@ const Userprogile = () => {
           </div>
           <div className="w-full h-[1px] bg-zinc-800 mt-5"></div>
           <div className="w-full h-full  mt-8 overflow-hidden">
-            <h1 className="text-[3rem] lg:text-[3vw] text-zinc-600 capitalize font-serif">
+            <h1 className="text-[2rem] lg:text-[3vw] text-zinc-600 capitalize font-serif">
               Past Work
             </h1>
-            <div className=" w-full min-h-[25rem] lg:h-[30rem] flex mt-4 overflow-hidden relative bg-[#2221211a] py-2 px-2">
+            <div className=" w-full min-h-[25rem] lg:h-[30rem] flex mt-4 overflow-hidden relative  py-2 px-2">
               <div className="w-full flex gap-3 md:gap-2 overflow-scroll">
-                {users.map((item, i) => (
+                {pastitem.map((item, i) => (
                   <div key={i} className="h-full">
                     <div className="w-80 h-[22rem] md:w-96 md:h-[29rem]  bg-[#0005]  backdrop-blur-[20px] relative rounded-md">
                       <div className="min-w-ful h-12 flex items-center justify-between px-[.5rem] py-[.2rem] md:px-[.8rem] md:py-[1rem]">
@@ -277,7 +294,7 @@ const Userprogile = () => {
                           </Link>
                           <button
                             className="bg-red-400 px-3 py-2 rounded-md w-[6rem]"
-                            onClick={() => removepastdata(item._id)}
+                            onClick={() => removecard(item._id)}
                           >
                             Delete
                           </button>

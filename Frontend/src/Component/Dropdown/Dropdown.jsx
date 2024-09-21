@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 
-function Dropdown({ title, options, func }) {
+function Dropdown({ title, options }) {
   const [selected, setSelected] = useState("");
 
   const handleChange = (e) => {
     setSelected(e.target.value);
-    func(e);
   };
 
   return (

@@ -7,7 +7,6 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-// axios.defaults.baseURL="http://localhost:8000"
 (axios.defaults.withCredentials = true),
   (axios.defaults.headers = {
     "Content-Type": "application/json",
@@ -36,6 +35,11 @@ const AddResearch = () => {
   };
 
   const onsubmit = async () => {
+    if (disabled) {
+      data.ongoingproject = true;
+    } else {
+      data.ongoingproject = false;
+    }
     try {
       const result = await axios.post(
         "http://localhost:8000/info/Uploaddata",
@@ -311,6 +315,32 @@ const AddResearch = () => {
                   </>
                 )}
               </div>
+              <div className="md:mb-5 mt-5 lg:w-[48vw] ">
+                <h1 className="text-white text-xl mb-1">Mentor Email</h1>
+                <div>
+                  <input
+                    type="text"
+                    value={data.MentorEmail}
+                    {...register("MentorEmail", {
+                      required: "MentorEmail is required",
+                      pattern: {
+                        value: /^\S+@\S+$/i,
+                        message: "Username must contain only letters",
+                      },
+                      onChange: handleChange,
+                    })}
+                    placeholder="Email..."
+                    className="text-lg py-2 px-3 w-full rounded-md  bg-zinc-900 text-white outline-none"
+                  />
+                </div>
+                {errors.MentorEmail && (
+                  <>
+                    <p style={{ color: "orangered" }}>
+                      {errors.MentorEmail.message}
+                    </p>
+                  </>
+                )}
+              </div>
               <div className="md:mb-5 mt-5 lg:w-[48vw]">
                 <h1 className="text-white text-xl mb-1">Research Title</h1>
                 <div>
@@ -391,19 +421,17 @@ const AddResearch = () => {
                       </p>
                     )}
                   </div>
-                  <div className="sm:w-[10rem] mt-2 sm:mr-5">
+                  <div className="sm:w-[10rem] md:w-full  lg:w-full mt-2 sm:mr-5">
                     <h1 className="text-white text-xl mb-1">End</h1>
-                    <div className="lg:flex-row flex flex-col items-center justify-between gap-14">
+                    <div className="sm:flex-row flex flex-col items-center justify-between gap-14">
                       <div className="w-full">
                         <input
                           type="date"
                           placeholder="YYYY-MM-dd"
                           value={data.projectend}
                           disabled={disabled}
-                          aria-disabled={disabled}
                           className="text-lg py-2 px-3 w-full rounded-md  bg-zinc-900 text-white outline-none"
                           {...register("projectend", {
-                            required: "endyear is required",
                             minLength: {
                               value: 8,
                               message: "endyear must be 8 characters or more",
@@ -422,25 +450,24 @@ const AddResearch = () => {
                           </>
                         )}
                       </div>
-                      <div className=" w-full flex items-center gap-20">
+                      <div className=" w-full flex items-center gap-10">
                         <h1 className="text-white text-xl mb-1">
                           Ongoing Project
                         </h1>
-                        <div> 
-                          <input
-                            type="checkbox"
+                        <div>
+                          <div
                             value={data.ongoingproject}
-                            id="ongoingproject"
-                            onClick={(e) => setdisabled(!e.target.checked)}
-                            className="text-lg py-2 px-3 w-full rounded-md  bg-zinc-900 text-white outline-none"
+                            onClick={() => setdisabled(!disabled)}
+                            className={`text-lg w-2 h-2 p-2 rounded-full  text-white outline-none ${
+                              disabled === true ? "bg-green-500" : "bg-red-500"
+                            }`}
                             {...register("ongoingproject", {
-                              required: "ongoingproject is required",
                               pattern: {
                                 message: "ongoingproject is required",
                               },
                               onChange: handleChange,
                             })}
-                          />
+                          ></div>
                         </div>
                       </div>
                       {errors.ongoingproject && (
@@ -460,23 +487,23 @@ const AddResearch = () => {
                 </h1>
                 <textarea
                   type="text"
-                  value={data.researchdiscription}
+                  value={data.researchdescription}
                   rows={6}
-                  {...register("researchdiscription", {
-                    required: "researchdiscription is required",
+                  {...register("researchdescription", {
+                    required: "researchdescription is required",
                     min: 4,
                     pattern: {
-                      message: "researchdiscription is invalid",
+                      message: "researchdescription is invalid",
                     },
                     onChange: handleChange,
                   })}
-                  placeholder="researchdiscription."
+                  placeholder="researchdescription."
                   className="text-lg py-2 px-3 resize-none w-full rounded-md  bg-zinc-900 text-white outline-none"
                 />
-                {errors.researchdiscription && (
+                {errors.researchdescription && (
                   <>
                     <p style={{ color: "orangered" }}>
-                      {errors.researchdiscription.message}
+                      {errors.researchdescription.message}
                     </p>
                   </>
                 )}

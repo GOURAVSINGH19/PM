@@ -38,9 +38,10 @@ const Login = () => {
         email,
         password,
       });
+      console.log(res)
       localStorage.setItem("token", res);
       toast.success("User login successfully");
-      navigate("/home");
+      navigate("/");
     } catch (err) {
       console.log("error in login", err);
     }

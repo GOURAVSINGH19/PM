@@ -1,10 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Researchdropdown, Researchdropdown2 } from "../Data/Data";
 import { FiSearch } from "react-icons/fi";
 import { RxHamburgerMenu } from "react-icons/rx";
 import bpit from "../assets/bpit.png";
 import axios from "axios";
+import noimg from "/noimg.jpg";
+import { FiX } from "react-icons/fi";
+import Messages from "./Message/Messages";
 
 const useDebouncedValue = (inputValue, delay) => {
   const [debouncedValue, setDebouncedValue] = useState(inputValue);
@@ -23,17 +26,25 @@ const useDebouncedValue = (inputValue, delay) => {
 };
 
 const Navbar = () => {
+  const [open, setopen] = useState(false);
+  const [message, setmessage] = useState([]);
+  const navigate = useNavigate(null);
   const [search, setsearch] = useState("");
   const [Researchdropdownopen, setResearchdropdown] = useState(false);
   const [Researchdropdownopen2, setResearchdropdown2] = useState(false);
   const [sidemenu, setsidemenu] = useState(false);
   const searchref = useRef();
-  const [user, setuser] = useState(null);
+  const [user, setuser] = useState([]);
+  const userAuth = localStorage.getItem("token");
 
-  
-  const handleLogout = () => {
-    localStorage.removeItem("jwtToken");
-    window.location.href = "/";
+  const handleLogout = async () => {
+    try {
+      await axios.post("http://localhost:8000/info/logout");
+      localStorage.removeItem("token");
+      navigate("/");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const HandleResearchopen = () => {
@@ -48,9 +59,22 @@ const Navbar = () => {
 
   const debounce = useDebouncedValue(search, 300);
 
+  const getsearch = async () => {
+    try {
+      const response = await axios.get("http://localhost:8000/info/Uploader");
+      const filteredUsers = response.data.filter((user) =>
+        user.username.toLowerCase().includes(search.toLowerCase())
+      );
+      setuser(filteredUsers);
+    } catch (err) {
+      console.log("Error in searching ", err);
+    }
+  };
+
   const HandleSearchChange = (e) => {
     let result = e.target.value;
     setsearch(result);
+    getsearch();
   };
 
   const handleClickOutside = (event) => {
@@ -63,19 +87,15 @@ const Navbar = () => {
 
   useEffect(() => {
     document.addEventListener("click", handleClickOutside);
+    getsearch();
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
-  }, []);
-
-  useEffect(() => {
-    //logic
   }, [debounce]);
 
   return (
     <div className="w-screen bg-white px-6 py-4">
       <div className="h-15 flex justify-between items-center text-black capitalize">
-        {/* nav-left */}
         <div className="flex justify-between items-center w-full md:w-auto">
           <Link to="/">
             <img src={bpit} alt="bpit" className="hidden sm:block w-20" />
@@ -140,7 +160,7 @@ const Navbar = () => {
         </div>
 
         <div className=" flex gap-20 items-center font-mono text-sm">
-          <div className="hidden md:flex relative dropdown">
+          <div className="hidden lg:flex relative dropdown">
             <h1
               className="font-serif text-xl cursor-pointer"
               onClick={HandleResearchopen}
@@ -160,7 +180,7 @@ const Navbar = () => {
             )}
           </div>
 
-          <div className="hidden md:flex relative dropdown">
+          <div className="hidden lg:flex relative dropdown">
             <h1
               className="font-serif text-xl cursor-pointer"
               onClick={HandleResearchopen2}
@@ -180,23 +200,57 @@ const Navbar = () => {
             )}
           </div>
 
-          <div className="relative ">
+          <div className="relative md:w-full w-[50vw]">
+            {search.length > 0 ? (
+              <span
+                className="absolute top-2 right-2 text-gray-500 cursor-pointer text-xl "
+                onClick={() => setsearch("")}
+              >
+                <FiX />
+              </span>
+            ) : (
+              <span
+                className="absolute top-2 right-2 text-gray-500 cursor-pointer text-xl "
+                onClick={() => searchref.current.focus()}
+              >
+                <FiSearch />
+              </span>
+            )}
             <input
+              id="search"
               type="text"
-              placeholder="Search..."
+              placeholder="Search"
               value={search}
               onChange={HandleSearchChange}
               ref={searchref}
-              className="px-3 py-2 bg-gray-300 rounded-md w-52 md:w-64"
+              className="px-3 py-2  text-md bg-gray-300 rounded-md outline-none w-full lg:w-96 md:w-64"
             />
-            <span
-              className="absolute top-2 right-2 text-gray-500 cursor-pointer text-xl "
-              onClick={() => searchref.current.focus()}
-            >
-              <FiSearch />
-            </span>
           </div>
-
+          {search.length > 0 && (
+            <div className="absolute w-[25vw] min-h-[10vh]  text-white top-[8%] right-[28%] bg-[#41404094] rounded-md overflow-auto z-20 p-[1rem]">
+              {user.length > 0 ? (
+                user.map((item, i) => (
+                  <Link
+                    to={`/viewresearch/${item._id}`}
+                    key={i}
+                    onClick={() => setsearch("")}
+                    className=" w-[100%] p-5 flex justify-start items-center rounded-sm border-zinc-100   hover:bg-pink-500  duration-500"
+                  >
+                    <img
+                      className="h-[5vh] rounded-full object-cover mr-5"
+                      src={noimg}
+                      alt="img"
+                    />
+                    <span className="ml-5">{item.username}</span>
+                  </Link>
+                ))
+              ) : (
+                <p className="flex justify-center items-center text-2xl text-white">
+                  NO User
+                </p>
+              )}
+            </div>
+          )}
           <span className="md:hidden  text-xl text-black ml-4 ">
             <RxHamburgerMenu
               onClick={() => setsidemenu(!sidemenu)}
@@ -205,20 +259,46 @@ const Navbar = () => {
           </span>
         </div>
 
-        <div className="hidden md:flex gap-4">
+        <div className="hidden md:flex gap-4 items-center">
+          <div>
+            <span
+              className="relative cursor-pointer"
+              onClick={() => setopen((e) => !e)}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 18 18"
+                width="2em"
+                height="2em"
+                fill="currentColor"
+                class="h-[20px] w-[20px] hover:text-text-primary dark:hover:text-text-primary text-text-secondary dark:text-text-secondary"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M7.19 1.564a.75.75 0 01.729.069c2.137 1.475 3.373 3.558 3.981 5.002l.641-.663a.75.75 0 011.17.115c1.633 2.536 1.659 5.537.391 7.725-1.322 2.282-3.915 2.688-5.119 2.688-1.177 0-3.679-.203-5.12-2.688-.623-1.076-.951-2.29-.842-3.528.109-1.245.656-2.463 1.697-3.54.646-.67 1.129-1.592 1.468-2.492.337-.895.51-1.709.564-2.105a.75.75 0 01.44-.583zm.784 2.023c-.1.368-.226.773-.385 1.193-.375.997-.947 2.13-1.792 3.005-.821.851-1.205 1.754-1.282 2.63-.078.884.153 1.792.647 2.645C6.176 14.81 7.925 15 8.983 15c1.03 0 2.909-.366 3.822-1.94.839-1.449.97-3.446.11-5.315l-.785.812a.75.75 0 01-1.268-.345c-.192-.794-1.04-2.948-2.888-4.625z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              {message.length > 0 && (
+                <span className=" absolute bg-pink-600 -top-2 -right-1 w-3 h-3 rounded-full "></span>
+              )}
+            </span>
+            {open && <Messages message={message}/>}
+          </div>
           <Link to="/user">
             <button className="bg-blue-500 text-white px-4 py-2 rounded-full">
-              User
+              Profile
             </button>
           </Link>
-          <Link to="/login">
-            <button
-              // onClick={handleLogout}
-              className="bg-blue-500 text-white px-4 py-2 rounded-full"
-            >
-              login
-            </button>
-          </Link>
+          <button className="bg-blue-500 text-white px-4 py-2 rounded-full">
+            {userAuth ? (
+              <h1 onClick={handleLogout}>Logout</h1>
+            ) : (
+              <Link to="/login">
+                <h1>Login</h1>
+              </Link>
+            )}
+          </button>
         </div>
       </div>
     </div>

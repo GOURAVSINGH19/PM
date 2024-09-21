@@ -1,6 +1,8 @@
 const UserInfoModel = require("../Models/Usersinfomodels");
+const sendEmail = require("../utils/VerifyUser");
 
 module.exports.Uploaduserinfo = async (req, res) => {
+  console.log(req.body);
   const {
     username,
     email,
@@ -19,6 +21,7 @@ module.exports.Uploaduserinfo = async (req, res) => {
     researchtitle,
     researchdescription,
     ongoingproject,
+    MentorEmail,
   } = req.body;
   try {
     if (!email) {
@@ -28,27 +31,35 @@ module.exports.Uploaduserinfo = async (req, res) => {
     if (user) {
       return res.status(400).send("User already exists");
     }
-    const newUser = new UserInfoModel({
-      username,
-      email,
-      phone,
-      enrollmentno,
-      collage,
-      department,
-      batchStart,
-      batchEnd,
-      github,
-      linkedin,
-      facultyname,
-      projectStart,
-      projectEnd,
-      projectUrl,
-      researchtitle,
-      researchdescription,
-      ongoingproject,
-    });
-    await newUser.save();
-    res.json(newUser);
+
+    const { verified } = UserInfoModel;
+    sendEmail(MentorEmail, "Please Verify User", req.body, verified);
+
+    if (verified == true) {
+      const newUser = new UserInfoModel({
+        username,
+        email,
+        phone,
+        enrollmentno,
+        collage,
+        department,
+        batchStart,
+        batchEnd,
+        github,
+        linkedin,
+        facultyname,
+        projectStart,
+        projectEnd,
+        projectUrl,
+        researchtitle,
+        researchdescription,
+        ongoingproject,
+        MentorEmail,
+      });
+      await newUser.save();
+      res.json(newUser);
+    }
+    res.json("Your are rejected");
   } catch (error) {
     console.error("Error fetching user info:", error);
     res.status(500).send("Internal server error");
@@ -57,6 +68,9 @@ module.exports.Uploaduserinfo = async (req, res) => {
 
 module.exports.Getalluser = async (req, res) => {
   try {
+    // if (!userisVerify) {
+    //   return res.status(403).json({ msg: "User not verified yet" });
+    // }
     const users = await UserInfoModel.find({});
     if (!users) {
       return res.status(404).json({ msg: "No data found" });
@@ -90,7 +104,7 @@ module.exports.DeleteById = async (req, res) => {
     if (!user) {
       return res.status(404).json({ msg: "User not found" });
     }
-
+    await user.save();
     res.json({ msg: "User deleted successfully", user });
   } catch (error) {
     console.error("Error deleting user info:", error);
@@ -99,3 +113,22 @@ module.exports.DeleteById = async (req, res) => {
       .json({ msg: "Internal server error", error: error.message });
   }
 };
+
+// // to check user is verify by mentor or not
+// module.exports.VerifyUser = async (req, res) => {
+//   const { token } = req.params;
+
+//   // Find data by token
+//   const data = await DataModel.findOne({ verificationToken: token });
+
+//   if (!data) {
+//     return res.status(400).send("Invalid token");
+//   }
+
+//   data.isVerified = true;
+//   data.verificationToken = null; // remove the token after verification
+//   await data.save();
+
+//   // You can redirect or inform the user about verification success
+//   res.status(200).send("Data verified successfully");
+// };

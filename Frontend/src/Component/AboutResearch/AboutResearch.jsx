@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../Navbar";
 import { Link } from "react-router-dom";
 import Footer from "../Footer/Footer";
+import axios from "axios";
 
 const data = [
   {
@@ -191,31 +192,35 @@ const pastdata = [
   },
 ];
 
-const Userprogile = () => {
-  const [open, setopen] = useState(false);
-  const [items, setitems] = useState(data);
+const Userprofile = () => {
+  const [user, setusers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const handleclick = (id) => {
-    data.forEach((item) => {
-      if (item.id === id) {
-        console.log(item.id);
-        setopen((prevOpen) => ({
-          ...prevOpen,
-          [item.id]: !prevOpen[item.id],
-        }));
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/info/Uploader");
+        setusers(response.data);
+        setLoading(false);
+      } catch (error) {
+        setError(error);
+        setLoading(false);
       }
-    });
-  };
+    };
 
-  const removecard = (itemId) => {
-    const updatedData = items.filter((item) => item.id !== itemId);
-    setitems(updatedData);
-  };
+    fetchData();
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+  if (error)
+    return (
+      <p className="text-white text-3xl capitalize flex justify-center items-center">
+        Error: {error.message}
+      </p>
+    );
   return (
     <div className="w-screen h-screen overflow-x-hidden">
-      <div>
-        <Navbar />
-      </div>
       <div className=" h-screen bg-zinc-900 flex overflow-hidden">
         <div className="w-[18vw] h-screen flex flex-col gap-3 p-3  border-r-[1px] border-zinc-700">
           <div className=" h-[30%] flex text-white items-center flex-col mt-10">
@@ -227,34 +232,36 @@ const Userprogile = () => {
                 alt=""
               />
             </div>
-            <h1 className="mt-4 text-xl">User Name</h1>
+            <h1 className="mt-4 text-xl">{user[0].username}</h1>
           </div>
           <div className=" h-[50%]  text-white px-10">
             <h1 className="text-2xl  p-3 text-center">Contact</h1>
             <h2 className="text-xl py-3">
               Researcher:
-              <div className="flex flex-col mt-3">
-                <li>Researcher Name</li>
-                <li>Researcher Name</li>
-                <li>Researcher Name</li>
-              </div>
+              {user.map((name) => (
+                <div className="flex flex-col mt-3">
+                  <li key={user._id}>{name.facultyname}</li>
+                </div>
+              ))}
             </h2>
             <div className="mt-5">
               <h2 className="text-xl py-3 ">Phone Number</h2>
-              <span>+91</span>
-              <h2 className="text-xl py-3 ">Email ID:</h2>
+              <span>+91 {user[0].phone}</span>
+              <h2 className="text-xl py-3 ">Email ID:{user[0].email}</h2>
               <h2 className="text-xl py-3 ">LinkedIn ID:</h2>
             </div>
           </div>
         </div>
         <div className="w-[80%] p-4 flex flex-col">
           <div className="research-section">
-            <h2>THIS IS RESEARCH PROOF SECTION</h2>
+            <h2>{user[0].researchtitle}</h2>
             <div className="section-content">researchproof</div>
           </div>
           <div className="research-section">
             <h2>THIS IS ABOUT RESEARCH SECTION</h2>
-            <div className="section-content">aboutResearch</div>
+            <div className="section-content text-white">
+              {user[0].researchdescription}
+            </div>
           </div>
           <div className="research-section">
             <h2>THIS IS RESEARCH APPROACH SECTION </h2>
@@ -269,4 +276,4 @@ const Userprogile = () => {
   );
 };
 
-export default Userprogile;
+export default Userprofile;
