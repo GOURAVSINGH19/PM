@@ -15,8 +15,9 @@ const {
   GetUserByID,
   Uploaduserinfo,
   DeleteById,
+  getUsers,
 } = require("../Controllers/Userdatacontroll");
-const { verified } = require("../Controllers/VerifyuserData");
+const { verified, verifyUser } = require("../Controllers/VerifyuserData");
 const corsOptions = {
   credentials: true,
   origin: "http://localhost:5173",
@@ -38,6 +39,8 @@ router.post("/reset-password", resetPassword);
 
 // user
 router.post("/Uploaddata", Uploaduserinfo);
+// get verified user
+router.get("/Verified-user",getUsers)
 // for all users
 router.get("/Uploader", Getalluser);
 // users by id
@@ -46,6 +49,6 @@ router.get("/Uploader/:id", GetUserByID);
 
 router.delete("/Uploader/:id", DeleteById);
 // verfied user
-router.post("/verfied-user/:id", verified);
+router.get('/verify/:token', verifyUser);
 
 module.exports = router;

@@ -134,11 +134,12 @@ const Userprogile = () => {
       );
       const data = response.data;
       if (data.ongoingproject) {
-        await axios.put(`http://localhost:8000/info/Uploader/${itemId}`, {
-          ongoingproject: false,
-        });
+        // await axios.put(`http://localhost:8000/info/Uploader/${itemId}`, {
+        //   ongoingproject: false,
+        // });
         const updatedusers = users.filter((item) => item._id !== itemId);
         setusers(updatedusers);
+        
       } else {
         const updatedPastData = pastitem.filter((item) => item._id !== itemId);
         setpastdata(updatedPastData);
@@ -154,9 +155,10 @@ const Userprogile = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/info/Uploader");
+        const response = await axios.get(
+          "http://localhost:8000/info/Verified-user"
+        );
         const data = response.data;
-        console.log(data);
         const ongoingUsers = data.filter(
           (user) => user.ongoingproject === true
         );

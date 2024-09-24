@@ -1,8 +1,8 @@
 const UserInfoModel = require("../Models/Usersinfomodels");
 const sendEmail = require("../utils/VerifyUser");
+const crypto = require("crypto");
 
 module.exports.Uploaduserinfo = async (req, res) => {
-  console.log(req.body);
   const {
     username,
     email,
@@ -23,54 +23,75 @@ module.exports.Uploaduserinfo = async (req, res) => {
     ongoingproject,
     MentorEmail,
   } = req.body;
+
   try {
     if (!email) {
       return res.status(400).send("Please provide an email");
     }
-    const user = await UserInfoModel.findOne({ email });
-    if (user) {
+
+    const existingUser = await UserInfoModel.findOne({ email });
+    if (existingUser) {
       return res.status(400).send("User already exists");
     }
 
-    const { verified } = UserInfoModel;
-    sendEmail(MentorEmail, "Please Verify User", req.body, verified);
+    const verificationToken = crypto.randomBytes(20).toString("hex");
+    const verificationUrl = verificationToken;
+    console.log(verificationUrl);
 
-    if (verified == true) {
-      const newUser = new UserInfoModel({
-        username,
-        email,
-        phone,
-        enrollmentno,
-        collage,
-        department,
-        batchStart,
-        batchEnd,
-        github,
-        linkedin,
-        facultyname,
-        projectStart,
-        projectEnd,
-        projectUrl,
-        researchtitle,
-        researchdescription,
-        ongoingproject,
-        MentorEmail,
-      });
-      await newUser.save();
-      res.json(newUser);
-    }
-    res.json("Your are rejected");
+    // Create new user with the verification token
+    const newUser = new UserInfoModel({
+      username,
+      email,
+      phone,
+      enrollmentno,
+      collage,
+      department,
+      batchStart,
+      batchEnd,
+      github,
+      linkedin,
+      facultyname,
+      projectStart,
+      projectEnd,
+      projectUrl,
+      researchtitle,
+      researchdescription,
+      ongoingproject,
+      MentorEmail,
+      verificationToken,
+    });
+
+    // Save the user
+    await newUser.save();
+
+    // Send the verification email
+    await sendEmail(
+      MentorEmail,
+      "Please Verify Your Email",
+      req.body,
+      verificationUrl
+    );
+
+    // Respond with the new user data
+    res.json(newUser);
   } catch (error) {
     console.error("Error fetching user info:", error);
     res.status(500).send("Internal server error");
   }
 };
 
+module.exports.getUsers = async (req, res) => {
+  try {
+    const users = await UserInfoModel.find({ verified: true });
+    res.json(users);
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    res.status(500).send("Internal server error");
+  }
+};
+
 module.exports.Getalluser = async (req, res) => {
   try {
-    // if (!userisVerify) {
-    //   return res.status(403).json({ msg: "User not verified yet" });
-    // }
     const users = await UserInfoModel.find({});
     if (!users) {
       return res.status(404).json({ msg: "No data found" });
@@ -104,7 +125,7 @@ module.exports.DeleteById = async (req, res) => {
     if (!user) {
       return res.status(404).json({ msg: "User not found" });
     }
-    await user.save();
+
     res.json({ msg: "User deleted successfully", user });
   } catch (error) {
     console.error("Error deleting user info:", error);
@@ -113,22 +134,3 @@ module.exports.DeleteById = async (req, res) => {
       .json({ msg: "Internal server error", error: error.message });
   }
 };
-
-// // to check user is verify by mentor or not
-// module.exports.VerifyUser = async (req, res) => {
-//   const { token } = req.params;
-
-//   // Find data by token
-//   const data = await DataModel.findOne({ verificationToken: token });
-
-//   if (!data) {
-//     return res.status(400).send("Invalid token");
-//   }
-
-//   data.isVerified = true;
-//   data.verificationToken = null; // remove the token after verification
-//   await data.save();
-
-//   // You can redirect or inform the user about verification success
-//   res.status(200).send("Data verified successfully");
-// };

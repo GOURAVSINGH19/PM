@@ -20,6 +20,8 @@ const UserinfoModel = new Schema(
     researchdescription: { type: String },
     ongoingproject: { type: Boolean },
     MentorEmail: { type: String },
+    verificationToken: String,
+    verified: { type: Boolean, default: false },
   },
   {
     timestamps: true,

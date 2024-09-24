@@ -1,18 +1,32 @@
-const UserInfoModel = require("../Models/Usersinfomodels");
+const Usersinfomodels = require("../Models/Usersinfomodels");
+const sendMail = require("../utils/Sendemail");
 
-module.exports.verified = async (req, res) => {
-  
-  if (!req.body.email) {
-    return res.status(400).json({ message: "Email is required" });
-  }
-  const user = await UserInfoModel.findOne({ email: req.body.email });
+module.exports.verifyUser = async (req, res) => {
+  const { token } = req.params;
+  console.log(`Verification token received: ${token}`);
 
-  if (!user) {
-    return res.status(404).json({ message: "User not found" });
+  if (!token) {
+    return res.status(400).send("Token is required");
   }
 
-  user.verified = true;
-  await user.save();
+  try {
+    const user = await Usersinfomodels.findOne({ verificationToken: token });
+    if (!user) {
+      return res.status(400).send("Invalid or expired token");
+    }
 
-  res.json({ message: "User verified successfully" });
+    console.log("user verified",user);
+
+    user.verified = true;
+    user.verificationToken = null; 
+    await user.save();
+
+    await sendMail(user.email, "Your email has been verified!", "You can now access your account.");
+
+
+    res.send("Your email has been verified successfully!");
+  } catch (error) {
+    console.error("Error verifying user:", error);
+    res.status(500).send("Internal server error");
+  }
 };

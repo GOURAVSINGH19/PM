@@ -4,12 +4,13 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "script": "npx nodemon"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^1.7.4",
+    "axios": "^1.7.7",
     "bcrypt": "^5.1.1",
     "config": "^3.3.12",
     "connect-flash": "^0.1.1",

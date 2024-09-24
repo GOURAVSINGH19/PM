@@ -9,7 +9,14 @@ const Validationdata = new Schema(
     facultyname: { type: String },
     projectUrl: { type: String },
     researchtitle: { type: String },
-    verified: false,
+    verified: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      default: null,
+    },
   },
   {
     timestamps: true,
