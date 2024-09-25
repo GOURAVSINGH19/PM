@@ -6,7 +6,7 @@ const UserinfoModel = new Schema(
     email: { type: String, required: true, unique: true },
     phone: { type: String },
     enrollmentno: { type: Number, required: true, unique: true, sparse: true },
-    college: { type: String },
+    collage: { type: String },
     department: { type: String },
     batchStart: { type: Date },
     batchend: { type: Date },

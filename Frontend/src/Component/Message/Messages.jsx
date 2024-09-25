@@ -2,7 +2,7 @@ import React from "react";
 
 const Messages = ({ message }) => {
 
-  
+
   return (
     <div className="bg-[#080707a4] absolute top-[5rem] p-[1rem] left-0 w-screen h-screen flex justify-end z-[99]">
       <div className="w-[30rem] p-[1rem] h-[40rem] bg-zinc-800 rounded-md ">
@@ -19,7 +19,7 @@ const Messages = ({ message }) => {
                   Retry
                 </button>
                 <button className="text-white text-[1rem] bg-red-400 px-3 py-2 rounded-md">
-                  Delete
+                  Discard
                 </button>
               </div>
             </div>

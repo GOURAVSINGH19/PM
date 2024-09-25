@@ -370,23 +370,23 @@ const AddResearch = () => {
                 <div>
                   <input
                     type="text"
-                    value={data.projecturl}
-                    {...register("projecturl", {
-                      required: "projecturl is required",
+                    value={data.projectUrl}
+                    {...register("projectUrl", {
+                      required: "projectUrl is required",
                       min: 4,
                       pattern: {
-                        message: "projecturl is invalid",
+                        message: "projectUrl is invalid",
                       },
                       onChange: handleChange,
                     })}
-                    placeholder="projecturl."
+                    placeholder="projectUrl."
                     className="text-lg py-2 px-3 w-full rounded-md  bg-zinc-900 text-white outline-none"
                   />
                 </div>
-                {errors.projecturl && (
+                {errors.projectUrl && (
                   <>
                     <p style={{ color: "orangered" }}>
-                      {errors.projecturl.message}
+                      {errors.projectUrl.message}
                     </p>
                   </>
                 )}

@@ -18,11 +18,14 @@ const Apidata = ({ children }) => {
     projectstart: "",
     projectend: "",
     ongoingproject:null,
-    projecturl: "",
+    projectUrl: "",
     researchtitle: "",
     researchdescription: "",
     MentorEmail:""
   });
+
+
+
 
   return (
     <fetchapi.Provider value={{ data, setdata }}>{children}</fetchapi.Provider>

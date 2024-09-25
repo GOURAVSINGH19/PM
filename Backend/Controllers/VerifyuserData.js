@@ -15,10 +15,10 @@ module.exports.verifyUser = async (req, res) => {
       return res.status(400).send("Invalid or expired token");
     }
 
-    console.log("user verified",user);
-
+    
     user.verified = true;
     user.verificationToken = null; 
+    console.log("user verified",user);
     await user.save();
 
     await sendMail(user.email, "Your email has been verified!", "You can now access your account.");

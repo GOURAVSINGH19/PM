@@ -127,7 +127,7 @@ const Navbar = () => {
                     </div>
                   )}
                 </div>
-                <div className="relative mb-4 dropdown font-serif">
+                {/* <div className="relative mb-4 dropdown font-serif">
                   <h1
                     className="font-serif text-xl cursor-pointer"
                     onClick={HandleResearchopen2}
@@ -145,14 +145,20 @@ const Navbar = () => {
                       </ul>
                     </div>
                   )}
-                </div>
+                </div> */}
                 <div className="flex flex-col relative mb-4 dropdown font-serif gap-2 md:gap-10 w-[50%] justify-end ">
                   <Link to="/user">
-                    <h1 className="font-serif text-xl cursor-pointer">User</h1>
+                    <h1 className="font-serif text-xl cursor-pointer">Profile</h1>
                   </Link>
-                  <Link to="/login">
-                    <h1 className="font-serif text-xl cursor-pointer">Login</h1>{" "}
-                  </Link>
+                  <button className="bg-blue-500 text-white px-4 py-2 rounded-full">
+                    {userAuth ? (
+                      <h1 onClick={handleLogout}>Logout</h1>
+                    ) : (
+                      <Link to="/login">
+                        <h1>Login</h1>
+                      </Link>
+                    )}
+                  </button>
                 </div>
               </div>
             </div>
@@ -180,7 +186,7 @@ const Navbar = () => {
             )}
           </div>
 
-          <div className="hidden lg:flex relative dropdown">
+          {/* <div className="hidden lg:flex relative dropdown">
             <h1
               className="font-serif text-xl cursor-pointer"
               onClick={HandleResearchopen2}
@@ -198,7 +204,7 @@ const Navbar = () => {
                 </ul>
               </div>
             )}
-          </div>
+          </div> */}
 
           <div className="relative md:w-full w-[50vw]">
             {search.length > 0 ? (
@@ -227,7 +233,7 @@ const Navbar = () => {
             />
           </div>
           {search.length > 0 && (
-            <div className="absolute w-[25vw] min-h-[10vh]  text-white top-[8%] right-[28%] bg-[#41404094] rounded-md overflow-auto z-20 p-[1rem]">
+            <div className="absolute w-[25vw] h-[40vh]  text-white top-[8%] right-[28%] bg-[#41404094] rounded-md overflow-y-scroll z-20 p-[1rem]">
               {user.length > 0 ? (
                 user.map((item, i) => (
                   <Link
@@ -271,7 +277,7 @@ const Navbar = () => {
                 width="2em"
                 height="2em"
                 fill="currentColor"
-                class="h-[20px] w-[20px] hover:text-text-primary dark:hover:text-text-primary text-text-secondary dark:text-text-secondary"
+                className="h-[20px] w-[20px] hover:text-text-primary dark:hover:text-text-primary text-text-secondary dark:text-text-secondary"
               >
                 <path
                   fill-rule="evenodd"
@@ -283,7 +289,7 @@ const Navbar = () => {
                 <span className=" absolute bg-pink-600 -top-2 -right-1 w-3 h-3 rounded-full "></span>
               )}
             </span>
-            {open && <Messages message={message}/>}
+            {open && <Messages message={message} />}
           </div>
           <Link to="/user">
             <button className="bg-blue-500 text-white px-4 py-2 rounded-full">

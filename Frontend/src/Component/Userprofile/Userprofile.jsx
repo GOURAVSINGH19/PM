@@ -1,129 +1,130 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Footer from "../Footer/Footer";
 import axios from "axios";
-import { trusted } from "mongoose";
+import img from "../../assets/largepreview.png";
+import userimg from "../../assets/image.png";
 
-const items = [
-  {
-    username: "example_user",
-    likes: 150,
-    id: 1,
-    img: "https://images.unsplash.com/photo-1720371300677-ba4838fa0678?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8",
-    projects: [
-      {
-        project_name: "Awesome Project",
-        date: "2024-07-09",
-        project_details: {
-          description: "This project aims to...",
-          technologies_used: ["Python", "Flask", "JavaScript", "React"],
-        },
-      },
-    ],
-  },
-  {
-    username: "example_user",
-    likes: 150,
-    id: 2,
-    img: "https://images.unsplash.com/photo-1720371300677-ba4838fa0678?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8",
-    projects: [
-      {
-        project_name: "Awesome Project",
-        date: "2024-07-09",
-        project_details: {
-          description: "This project aims to...",
-          technologies_used: ["Python", "Flask", "JavaScript", "React"],
-        },
-      },
-    ],
-  },
-  {
-    username: "example_user",
-    likes: 150,
-    id: 3,
-    img: "https://images.unsplash.com/photo-1720371300677-ba4838fa0678?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8",
-    projects: [
-      {
-        project_name: "Awesome Project",
-        date: "2024-07-09",
-        project_details: {
-          description: "This project aims to...",
-          technologies_used: ["Python", "Flask", "JavaScript", "React"],
-        },
-      },
-    ],
-  },
-  {
-    username: "example_user",
-    likes: 150,
-    id: 4,
-    img: "https://images.unsplash.com/photo-1720371300677-ba4838fa0678?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8",
-    projects: [
-      {
-        project_name: "Awesome Project",
-        date: "2024-07-09",
-        project_details: {
-          description: "This project aims to...",
-          technologies_used: ["Python", "Flask", "JavaScript", "React"],
-        },
-      },
-    ],
-  },
-  {
-    username: "example_user",
-    likes: 150,
-    id: 5,
-    img: "https://images.unsplash.com/photo-1720371300677-ba4838fa0678?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8",
-    projects: [
-      {
-        project_name: "Awesome Project",
-        date: "2024-07-09",
-        project_details: {
-          description: "This project aims to...",
-          technologies_used: ["Python", "Flask", "JavaScript", "React"],
-        },
-      },
-    ],
-  },
-];
+// const items = [
+//   {
+//     username: "example_user",
+//     likes: 150,
+//     id: 1,
+//     img: "https://images.unsplash.com/photo-1720371300677-ba4838fa0678?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8",
+//     projects: [
+//       {
+//         project_name: "Awesome Project",
+//         date: "2024-07-09",
+//         project_details: {
+//           description: "This project aims to...",
+//           technologies_used: ["Python", "Flask", "JavaScript", "React"],
+//         },
+//       },
+//     ],
+//   },
+//   {
+//     username: "example_user",
+//     likes: 150,
+//     id: 2,
+//     img: "https://images.unsplash.com/photo-1720371300677-ba4838fa0678?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8",
+//     projects: [
+//       {
+//         project_name: "Awesome Project",
+//         date: "2024-07-09",
+//         project_details: {
+//           description: "This project aims to...",
+//           technologies_used: ["Python", "Flask", "JavaScript", "React"],
+//         },
+//       },
+//     ],
+//   },
+//   {
+//     username: "example_user",
+//     likes: 150,
+//     id: 3,
+//     img: "https://images.unsplash.com/photo-1720371300677-ba4838fa0678?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8",
+//     projects: [
+//       {
+//         project_name: "Awesome Project",
+//         date: "2024-07-09",
+//         project_details: {
+//           description: "This project aims to...",
+//           technologies_used: ["Python", "Flask", "JavaScript", "React"],
+//         },
+//       },
+//     ],
+//   },
+//   {
+//     username: "example_user",
+//     likes: 150,
+//     id: 4,
+//     img: "https://images.unsplash.com/photo-1720371300677-ba4838fa0678?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8",
+//     projects: [
+//       {
+//         project_name: "Awesome Project",
+//         date: "2024-07-09",
+//         project_details: {
+//           description: "This project aims to...",
+//           technologies_used: ["Python", "Flask", "JavaScript", "React"],
+//         },
+//       },
+//     ],
+//   },
+//   {
+//     username: "example_user",
+//     likes: 150,
+//     id: 5,
+//     img: "https://images.unsplash.com/photo-1720371300677-ba4838fa0678?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8",
+//     projects: [
+//       {
+//         project_name: "Awesome Project",
+//         date: "2024-07-09",
+//         project_details: {
+//           description: "This project aims to...",
+//           technologies_used: ["Python", "Flask", "JavaScript", "React"],
+//         },
+//       },
+//     ],
+//   },
+// ];
 
-const pastdata = [
-  {
-    researchname: "Awesome Project",
-    likes: 20,
-    id: 1,
-    img: "https://images.unsplash.com/photo-1720371300677-ba4838fa0678?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZH",
-  },
-  {
-    researchname: "Awesome Project",
-    likes: 20,
-    id: 2,
-    img: "https://images.unsplash.com/photo-1720371300677-ba4838fa0678?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZH",
-  },
+// const pastdata = [
+//   {
+//     researchname: "Awesome Project",
+//     likes: 20,
+//     id: 1,
+//     img: "https://images.unsplash.com/photo-1720371300677-ba4838fa0678?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZH",
+//   },
+//   {
+//     researchname: "Awesome Project",
+//     likes: 20,
+//     id: 2,
+//     img: "https://images.unsplash.com/photo-1720371300677-ba4838fa0678?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZH",
+//   },
 
-  {
-    researchname: "Awesome Project",
-    likes: 20,
-    id: 3,
-    img: "https://images.unsplash.com/photo-1720371300677-ba4838fa0678?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZH",
-  },
-  {
-    researchname: "Awesome Project",
-    likes: 20,
-    id: 4,
-    img: "https://images.unsplash.com/photo-1720371300677-ba4838fa0678?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZH",
-  },
-  {
-    researchname: "Awesome Project",
-    likes: 20,
-    id: 5,
-    img: "https://images.unsplash.com/photo-1720371300677-ba4838fa0678?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZH",
-  },
-];
+//   {
+//     researchname: "Awesome Project",
+//     likes: 20,
+//     id: 3,
+//     img: "https://images.unsplash.com/photo-1720371300677-ba4838fa0678?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZH",
+//   },
+//   {
+//     researchname: "Awesome Project",
+//     likes: 20,
+//     id: 4,
+//     img: "https://images.unsplash.com/photo-1720371300677-ba4838fa0678?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZH",
+//   },
+//   {
+//     researchname: "Awesome Project",
+//     likes: 20,
+//     id: 5,
+//     img: "https://images.unsplash.com/photo-1720371300677-ba4838fa0678?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZH",
+//   },
+// ];
 
-const Userprogile = () => {
-  const [users, setusers] = useState([]);
-  const [pastitem, setpastdata] = useState([]);
+const Userprofile = () => {
+  const [users, setUsers] = useState([]);
+  const [pastitem, setPastitems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -134,15 +135,13 @@ const Userprogile = () => {
       );
       const data = response.data;
       if (data.ongoingproject) {
-        // await axios.put(`http://localhost:8000/info/Uploader/${itemId}`, {
-        //   ongoingproject: false,
-        // });
-        const updatedusers = users.filter((item) => item._id !== itemId);
-        setusers(updatedusers);
-        
+        await axios.put(`http://localhost:8000/info/Uploader/${itemId}`, {
+          ongoingproject: false,
+        });
+        setUsers(users.filter((item) => item._id !== itemId));
       } else {
         const updatedPastData = pastitem.filter((item) => item._id !== itemId);
-        setpastdata(updatedPastData);
+        setPastitems(updatedPastData);
       }
       setLoading(false);
     } catch (error) {
@@ -156,15 +155,16 @@ const Userprogile = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/info/Verified-user"
+          `http://localhost:8000/info/Verified-user`
         );
         const data = response.data;
+
         const ongoingUsers = data.filter(
           (user) => user.ongoingproject === true
         );
-        setusers(ongoingUsers);
+        setUsers(ongoingUsers);
         const pastUsers = data.filter((user) => user.ongoingproject === false);
-        setpastdata(pastUsers);
+        setPastitems(pastUsers);
         setLoading(false);
       } catch (error) {
         setError(error);
@@ -183,14 +183,22 @@ const Userprogile = () => {
         <div className="w-full">
           <div className=" w-full flex gap-5 items-center">
             <div className="w-20">
-              <div className="w-16 h-16 rounded-full bg-zinc-500"></div>
+              <div className="w-16 h-16 rounded-full bg-zinc-500">
+                <Link to="/user">
+                  <img
+                    src={userimg}
+                    alt="user-img"
+                    className="w-16 h-16 object-cover rounded-full"
+                  />
+                </Link>
+              </div>
             </div>
-            <div>
-              <h2 className=" text-2xl font-semibold">
-                {users.username ? users.username : "User Name"}
+            <div className="w-full  min-h-fit">
+              <h2 className=" text-2xl font-semibold capitalize">
+                {users.username ? users.username: pastitem[0].username}
               </h2>
               <p className="text-sm text-gray-400 mt-1">
-                {users.collage ? users.collage : "Collage Name"}
+                {users.collage ? users.collage : pastitem[0].collage}
               </p>
             </div>
           </div>
@@ -208,10 +216,10 @@ const Userprogile = () => {
                     <div className="w-80 h-[22rem] md:w-96 md:h-[29rem]  bg-[#0005]  backdrop-blur-[20px] relative rounded-md">
                       <div className="min-w-full h-12 flex items-center justify-between px-[.5rem] py-[.2rem] md:px-[.8rem] md:py-[1rem]">
                         <div className="">
-                          <Link to="/user-info">
+                          <Link to="/user">
                             <img
-                              src={item.img}
-                              alt="user-img"
+                              src={userimg}
+                              alt="user"
                               className="w-10 h-10 rounded-full"
                             />
                           </Link>
@@ -222,25 +230,29 @@ const Userprogile = () => {
                       </div>
 
                       <div className="min-w-full">
-                        <div className="w-full p-[.5rem]   rounded-lg">
-                          <img
-                            src={item.img}
-                            alt="img"
-                            className="object-cover md:h-[20rem]"
-                          />
+                        <div className="w-full p-[.5rem]  cursor-pointer rounded-lg">
+                          <Link to={item.projectUrl}>
+                            <img
+                              src={img}
+                              alt="img"
+                              className="object-cover w-full md:h-[20rem]"
+                            />
+                          </Link>
                         </div>
                       </div>
 
                       <div className="w-full mt-4 ">
                         <div className="px-3 flex justify-between">
-                          <Link to="/user">
+                          <Link to={`/AddResearch/${item._id}`}>
                             <button className="bg-blue-500 px-3 py-2 rounded-md w-[5rem]">
                               Edit
                             </button>
                           </Link>
                           <button
                             className="bg-red-400 px-3 py-2 rounded-md w-[6rem]"
-                            onClick={() => removecard(item._id)}
+                            onClick={() => {
+                              removecard(item._id);
+                            }}
                           >
                             Delete
                           </button>
@@ -264,9 +276,9 @@ const Userprogile = () => {
                     <div className="w-80 h-[22rem] md:w-96 md:h-[29rem]  bg-[#0005]  backdrop-blur-[20px] relative rounded-md">
                       <div className="min-w-ful h-12 flex items-center justify-between px-[.5rem] py-[.2rem] md:px-[.8rem] md:py-[1rem]">
                         <div className="">
-                          <Link to="/user-info">
+                          <Link to="/user">
                             <img
-                              src={item.img}
+                              src={userimg}
                               alt="user-img"
                               className="w-10 h-10 rounded-full"
                             />
@@ -278,18 +290,20 @@ const Userprogile = () => {
                       </div>
 
                       <div className="min-w-full">
-                        <div className="w-full p-[.5rem]   rounded-lg">
-                          <img
-                            src={item.img}
-                            alt="img"
-                            className="object-cover md:h-[20rem]"
-                          />
+                        <div className="w-full p-[.5rem] flex justify-center  rounded-lg">
+                          <Link to={item.projectUrl}>
+                            <img
+                              src={img}
+                              alt="img"
+                              className="object-cover md:h-[20rem]"
+                            />
+                          </Link>
                         </div>
                       </div>
 
                       <div className="w-full mt-4 ">
                         <div className="px-3 flex justify-between">
-                          <Link to="/user">
+                          <Link to={`/AddResearch/${item._id}`}>
                             <button className="bg-blue-600 px-3 py-2 rounded-md w-[5rem]">
                               Edit
                             </button>
@@ -310,11 +324,11 @@ const Userprogile = () => {
           </div>
         </div>
       </div>
-      <div className="">
+      <div>
         <Footer />
       </div>
     </div>
   );
 };
 
-export default Userprogile;
+export default Userprofile;
