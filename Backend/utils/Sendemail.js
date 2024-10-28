@@ -51,10 +51,11 @@ const sendMail = async (email, text, OTP) => {
     text: text,
   };
 
-  await transpoter.sendMail(mailoptions, (err) => {
+  transpoter.sendMail(mailoptions, (err) => {
     if (err) console.log(err);
     else console.log("Email sent successfully");
   });
 };
+
 
 module.exports = sendMail;

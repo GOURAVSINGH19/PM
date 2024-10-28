@@ -1,30 +1,64 @@
-import React from "react";
+import axios from "axios";
+import React, { useContext, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
-const Messages = ({ message }) => {
+const Messages = ({ message, id }) => {
+  console.log(message, id);
+  const handleRetry = async () => {
+    try {
+      toast.success("Email sent successfully");
+      await axios.post(`http://localhost:8000/info/sendemail/${id}`);
+    } catch (error) {
+      console.log("error in retry", error);
+      toast.error("Failed to retry");
+    }
+  };
 
+  const handleDiscard = () => {
+    // Implement discard logic, such as clearing messages or navigating away
+  };
+
+  const handleMarked = () => {
+    // Implement marking logic, such as marking the message as read or deleting it
+  };
 
   return (
-    <div className="bg-[#080707a4] absolute top-[5rem] p-[1rem] left-0 w-screen h-screen flex justify-end z-[99]">
-      <div className="w-[30rem] p-[1rem] h-[40rem] bg-zinc-800 rounded-md ">
-        <h1 className="text-white text-[2rem] ">Messages</h1>
-        <div className="w-full h-full relative mt-5">
-          {/* {message.map((items, i) => { */}
-          <div className="w-[25rem] h-[8rem] bg-purple-800 rounded-md">
-            <div className="px-[1rem] py-[1rem]">
-              <h1 className="text-white text-[1rem] mb-8">
-                Your Submission rejected
-              </h1>
-              <div className="flex  items-center justify-between">
-                <button className="text-white text-[1rem] bg-blue-400 px-3 py-2 rounded-md">
+    <div className="w-screen h-screen flex justify-center items-center left-0 absolute z-[99] top-[5rem] bg-[#000]">
+      <div className="w-full p-[1rem] h-full bg-zinc-900 rounded-md overflow-y-auto">
+        <div className="h-10 w-full mb-5">
+          <h1 className="text-white text-[2rem] md:text-[3rem]">Messages</h1>
+        </div>
+        <div className="w-full h-full relative mt-16 flex flex-col items-center">
+          <div className=" w-full h-[8rem] md:w-[40rem] bg-white rounded-md mb-4">
+            <div className="px-[1rem] py-[1rem] flex-col sm:flex-row md:flex items-center ">
+              <div className="h-16 w-full flex items-center">
+                <h1 className="text-black text-[1rem] font-800 font-serif">
+                  {message}
+                </h1>
+              </div>
+              <div className="flex items-center  gap-5 sm:gap-4">
+                <button
+                  className="text-white text-[1rem] bg-blue-400 px-3 py-2 rounded-md"
+                  onClick={handleRetry}
+                >
                   Retry
                 </button>
-                <button className="text-white text-[1rem] bg-red-400 px-3 py-2 rounded-md">
+                <button
+                  className="text-white text-[1rem] bg-red-400 px-3 py-2 rounded-md"
+                  onClick={handleDiscard}
+                >
                   Discard
+                </button>
+                <button
+                  className="text-white text-[1rem] bg-gray-800 px-3 py-2 rounded-md"
+                  onClick={handleMarked}
+                >
+                  Marked
                 </button>
               </div>
             </div>
           </div>
-          {/* })} */}
         </div>
       </div>
     </div>

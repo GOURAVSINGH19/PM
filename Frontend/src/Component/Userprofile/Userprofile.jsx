@@ -5,123 +5,6 @@ import axios from "axios";
 import img from "../../assets/largepreview.png";
 import userimg from "../../assets/image.png";
 
-// const items = [
-//   {
-//     username: "example_user",
-//     likes: 150,
-//     id: 1,
-//     img: "https://images.unsplash.com/photo-1720371300677-ba4838fa0678?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8",
-//     projects: [
-//       {
-//         project_name: "Awesome Project",
-//         date: "2024-07-09",
-//         project_details: {
-//           description: "This project aims to...",
-//           technologies_used: ["Python", "Flask", "JavaScript", "React"],
-//         },
-//       },
-//     ],
-//   },
-//   {
-//     username: "example_user",
-//     likes: 150,
-//     id: 2,
-//     img: "https://images.unsplash.com/photo-1720371300677-ba4838fa0678?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8",
-//     projects: [
-//       {
-//         project_name: "Awesome Project",
-//         date: "2024-07-09",
-//         project_details: {
-//           description: "This project aims to...",
-//           technologies_used: ["Python", "Flask", "JavaScript", "React"],
-//         },
-//       },
-//     ],
-//   },
-//   {
-//     username: "example_user",
-//     likes: 150,
-//     id: 3,
-//     img: "https://images.unsplash.com/photo-1720371300677-ba4838fa0678?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8",
-//     projects: [
-//       {
-//         project_name: "Awesome Project",
-//         date: "2024-07-09",
-//         project_details: {
-//           description: "This project aims to...",
-//           technologies_used: ["Python", "Flask", "JavaScript", "React"],
-//         },
-//       },
-//     ],
-//   },
-//   {
-//     username: "example_user",
-//     likes: 150,
-//     id: 4,
-//     img: "https://images.unsplash.com/photo-1720371300677-ba4838fa0678?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8",
-//     projects: [
-//       {
-//         project_name: "Awesome Project",
-//         date: "2024-07-09",
-//         project_details: {
-//           description: "This project aims to...",
-//           technologies_used: ["Python", "Flask", "JavaScript", "React"],
-//         },
-//       },
-//     ],
-//   },
-//   {
-//     username: "example_user",
-//     likes: 150,
-//     id: 5,
-//     img: "https://images.unsplash.com/photo-1720371300677-ba4838fa0678?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8",
-//     projects: [
-//       {
-//         project_name: "Awesome Project",
-//         date: "2024-07-09",
-//         project_details: {
-//           description: "This project aims to...",
-//           technologies_used: ["Python", "Flask", "JavaScript", "React"],
-//         },
-//       },
-//     ],
-//   },
-// ];
-
-// const pastdata = [
-//   {
-//     researchname: "Awesome Project",
-//     likes: 20,
-//     id: 1,
-//     img: "https://images.unsplash.com/photo-1720371300677-ba4838fa0678?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZH",
-//   },
-//   {
-//     researchname: "Awesome Project",
-//     likes: 20,
-//     id: 2,
-//     img: "https://images.unsplash.com/photo-1720371300677-ba4838fa0678?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZH",
-//   },
-
-//   {
-//     researchname: "Awesome Project",
-//     likes: 20,
-//     id: 3,
-//     img: "https://images.unsplash.com/photo-1720371300677-ba4838fa0678?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZH",
-//   },
-//   {
-//     researchname: "Awesome Project",
-//     likes: 20,
-//     id: 4,
-//     img: "https://images.unsplash.com/photo-1720371300677-ba4838fa0678?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZH",
-//   },
-//   {
-//     researchname: "Awesome Project",
-//     likes: 20,
-//     id: 5,
-//     img: "https://images.unsplash.com/photo-1720371300677-ba4838fa0678?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZH",
-//   },
-// ];
-
 const Userprofile = () => {
   const [users, setUsers] = useState([]);
   const [pastitem, setPastitems] = useState([]);
@@ -158,7 +41,6 @@ const Userprofile = () => {
           `http://localhost:8000/info/Verified-user`
         );
         const data = response.data;
-
         const ongoingUsers = data.filter(
           (user) => user.ongoingproject === true
         );
@@ -195,10 +77,10 @@ const Userprofile = () => {
             </div>
             <div className="w-full  min-h-fit">
               <h2 className=" text-2xl font-semibold capitalize">
-                {users.username ? users.username: pastitem[0].username}
+                {users.username ? users.username : pastitem[0].username}
               </h2>
               <p className="text-sm text-gray-400 mt-1">
-                {users.collage ? users.collage : pastitem[0].collage}
+                {users.college ? users.college : pastitem[0].college}
               </p>
             </div>
           </div>
@@ -230,12 +112,12 @@ const Userprofile = () => {
                       </div>
 
                       <div className="min-w-full">
-                        <div className="w-full p-[.5rem]  cursor-pointer rounded-lg">
+                        <div className="w-full p-[.5rem] flex justify-center  rounded-lg">
                           <Link to={item.projectUrl}>
                             <img
                               src={img}
                               alt="img"
-                              className="object-cover w-full md:h-[20rem]"
+                              className="object-cover md:h-[20rem]"
                             />
                           </Link>
                         </div>
@@ -273,8 +155,8 @@ const Userprofile = () => {
               <div className="w-full flex gap-3 md:gap-2 overflow-scroll">
                 {pastitem.map((item, i) => (
                   <div key={i} className="h-full">
-                    <div className="w-80 h-[22rem] md:w-96 md:h-[29rem]  bg-[#0005]  backdrop-blur-[20px] relative rounded-md">
-                      <div className="min-w-ful h-12 flex items-center justify-between px-[.5rem] py-[.2rem] md:px-[.8rem] md:py-[1rem]">
+                    <div className="w-96 h-[35rem] p-[.5rem] md:w-96 md:h-[29rem]  bg-[#0005]  backdrop-blur-[20px] relative rounded-md">
+                      <div className="min-w-full h-12 flex items-center justify-between px-[.5rem] py-[.2rem] md:px-[.8rem] md:py-[1rem]">
                         <div className="">
                           <Link to="/user">
                             <img
@@ -289,13 +171,13 @@ const Userprofile = () => {
                         </span>
                       </div>
 
-                      <div className="min-w-full">
-                        <div className="w-full p-[.5rem] flex justify-center  rounded-lg">
+                      <div className="min-w-full ">
+                        <div className="w-full p-[.5rem] flex justify-center items-center h-[26rem] sm:h-full  rounded-lg">
                           <Link to={item.projectUrl}>
                             <img
                               src={img}
                               alt="img"
-                              className="object-cover md:h-[20rem]"
+                              className="object-cover h-96 md:h-[20rem]"
                             />
                           </Link>
                         </div>

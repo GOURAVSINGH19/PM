@@ -8,6 +8,7 @@ import ResearchDetails from "../Component/AboutResearch/AboutResearch";
 import Login from "../Component/Login/Login";
 import Signup from "../Component/signup/Signup";
 import ProtectedRouter from "../utils/Protectedrouter";
+import Messages from "../Component/Message/Messages";
 function Link() {
   return (
     <Routes>
@@ -21,6 +22,9 @@ function Link() {
         </Route>
         <Route path="/viewresearch" element={<ResearchDetails />}>
           <Route path="/viewresearch/:id" element={<ResearchDetails />} />
+        </Route>
+        <Route path="/notificaiton" element={<Messages />}>
+          <Route path="/notificaiton/:id" element={<Messages />}></Route>
         </Route>
       </Route>
       <Route path="/login" element={<Login />} />

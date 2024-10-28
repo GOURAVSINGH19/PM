@@ -8,7 +8,7 @@ module.exports.Uploaduserinfo = async (req, res) => {
     email,
     phone,
     enrollmentno,
-    collage,
+    college,
     department,
     batchStart,
     batchEnd,
@@ -44,7 +44,7 @@ module.exports.Uploaduserinfo = async (req, res) => {
       email,
       phone,
       enrollmentno,
-      collage,
+      college,
       department,
       batchStart,
       batchEnd,
@@ -104,7 +104,6 @@ module.exports.Getalluser = async (req, res) => {
 };
 
 module.exports.GetUserByID = async (req, res) => {
-
   try {
     const user = await UserInfoModel.findById(req.params.id);
     res.status(200).send(user);

@@ -8,7 +8,7 @@ const Apidata = ({ children }) => {
     email: "",
     phone: "",
     enrollmentno: "",
-    collage: "",
+    college: "",
     department: "",
     BatchStart: "",
     BatchEnd: "",
@@ -23,8 +23,6 @@ const Apidata = ({ children }) => {
     researchdescription: "",
     MentorEmail:""
   });
-
-
 
 
   return (

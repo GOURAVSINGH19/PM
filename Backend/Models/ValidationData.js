@@ -17,6 +17,7 @@ const Validationdata = new Schema(
       type: String,
       default: null,
     },
+    Notifications: { type: String }
   },
   {
     timestamps: true,

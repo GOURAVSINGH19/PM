@@ -6,7 +6,7 @@ const UserinfoModel = new Schema(
     email: { type: String, required: true, unique: true },
     phone: { type: String },
     enrollmentno: { type: Number, required: true, unique: true, sparse: true },
-    collage: { type: String },
+    college: { type: String },
     department: { type: String },
     batchStart: { type: Date },
     batchend: { type: Date },
@@ -22,6 +22,7 @@ const UserinfoModel = new Schema(
     MentorEmail: { type: String },
     verificationToken: String,
     verified: { type: Boolean, default: false },
+    Notifications: { type: String }
   },
   {
     timestamps: true,

@@ -27,7 +27,7 @@ const useDebouncedValue = (inputValue, delay) => {
 
 const Navbar = () => {
   const [open, setopen] = useState(false);
-  const [message, setmessage] = useState([]);
+  const [message, setMessage] = useState([]);
   const navigate = useNavigate(null);
   const [search, setsearch] = useState("");
   const [Researchdropdownopen, setResearchdropdown] = useState(false);
@@ -36,6 +36,23 @@ const Navbar = () => {
   const searchref = useRef();
   const [user, setuser] = useState([]);
   const userAuth = localStorage.getItem("token");
+  const [userId, setuserId] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/info/Verified-user`
+        );
+        const data = response.data;
+        setuserId(data[0]._id);
+        setMessage(data[0].Notifications);
+      } catch (error) {
+        console.log("Error in fetching message", error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -148,7 +165,9 @@ const Navbar = () => {
                 </div> */}
                 <div className="flex flex-col relative mb-4 dropdown font-serif gap-2 md:gap-10 w-[50%] justify-end ">
                   <Link to="/user">
-                    <h1 className="font-serif text-xl cursor-pointer">Profile</h1>
+                    <h1 className="font-serif text-xl cursor-pointer">
+                      Profile
+                    </h1>
                   </Link>
                   <button className="bg-blue-500 text-white px-4 py-2 rounded-full">
                     {userAuth ? (
@@ -267,30 +286,33 @@ const Navbar = () => {
 
         <div className="hidden md:flex gap-4 items-center">
           <div>
-            <span
-              className="relative cursor-pointer"
-              onClick={() => setopen((e) => !e)}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 18 18"
-                width="2em"
-                height="2em"
-                fill="currentColor"
-                className="h-[20px] w-[20px] hover:text-text-primary dark:hover:text-text-primary text-text-secondary dark:text-text-secondary"
+            <Link to={`/notification/${userId}`}>
+              <span
+                className="relative cursor-pointer"
+                // onClick={(e) => setopen(!e)}
               >
-                <path
-                  fill-rule="evenodd"
-                  d="M7.19 1.564a.75.75 0 01.729.069c2.137 1.475 3.373 3.558 3.981 5.002l.641-.663a.75.75 0 011.17.115c1.633 2.536 1.659 5.537.391 7.725-1.322 2.282-3.915 2.688-5.119 2.688-1.177 0-3.679-.203-5.12-2.688-.623-1.076-.951-2.29-.842-3.528.109-1.245.656-2.463 1.697-3.54.646-.67 1.129-1.592 1.468-2.492.337-.895.51-1.709.564-2.105a.75.75 0 01.44-.583zm.784 2.023c-.1.368-.226.773-.385 1.193-.375.997-.947 2.13-1.792 3.005-.821.851-1.205 1.754-1.282 2.63-.078.884.153 1.792.647 2.645C6.176 14.81 7.925 15 8.983 15c1.03 0 2.909-.366 3.822-1.94.839-1.449.97-3.446.11-5.315l-.785.812a.75.75 0 01-1.268-.345c-.192-.794-1.04-2.948-2.888-4.625z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-              {message.length > 0 && (
-                <span className=" absolute bg-pink-600 -top-2 -right-1 w-3 h-3 rounded-full "></span>
-              )}
-            </span>
-            {open && <Messages message={message} />}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 18 18"
+                  width="2em"
+                  height="2em"
+                  fill="currentColor"
+                  className="h-[20px] w-[20px] hover:text-text-primary dark:hover:text-text-primary text-text-secondary dark:text-text-secondary"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M7.19 1.564a.75.75 0 01.729.069c2.137 1.475 3.373 3.558 3.981 5.002l.641-.663a.75.75 0 011.17.115c1.633 2.536 1.659 5.537.391 7.725-1.322 2.282-3.915 2.688-5.119 2.688-1.177 0-3.679-.203-5.12-2.688-.623-1.076-.951-2.29-.842-3.528.109-1.245.656-2.463 1.697-3.54.646-.67 1.129-1.592 1.468-2.492.337-.895.51-1.709.564-2.105a.75.75 0 01.44-.583zm.784 2.023c-.1.368-.226.773-.385 1.193-.375.997-.947 2.13-1.792 3.005-.821.851-1.205 1.754-1.282 2.63-.078.884.153 1.792.647 2.645C6.176 14.81 7.925 15 8.983 15c1.03 0 2.909-.366 3.822-1.94.839-1.449.97-3.446.11-5.315l-.785.812a.75.75 0 01-1.268-.345c-.192-.794-1.04-2.948-2.888-4.625z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+                {message.length > 0 && (
+                  <span className=" absolute bg-pink-600 -top-2 -right-1 w-3 h-3 rounded-full "></span>
+                )}
+              </span>
+              =<Messages message={message} id={userId} />
+            </Link>
           </div>
+
           <Link to="/user">
             <button className="bg-blue-500 text-white px-4 py-2 rounded-full">
               Profile

@@ -40,6 +40,9 @@ const AddResearch = () => {
     } else {
       data.ongoingproject = false;
     }
+    if (data) {
+      toast("User already exist");
+    }
     try {
       const result = await axios.post(
         "http://localhost:8000/info/Uploaddata",
@@ -175,30 +178,30 @@ const AddResearch = () => {
                 )}
               </div>
               <div className="md:mr-5 mt-5 lg:w-[48vw]">
-                <h1 className="text-white text-xl mb-1">collage</h1>
+                <h1 className="text-white text-xl mb-1">college</h1>
                 <div>
                   <input
                     type="text"
-                    placeholder="collage"
-                    value={data.collage}
+                    placeholder="college"
+                    value={data.college}
                     className="text-lg py-2 px-3 w-full rounded-md  bg-zinc-900 text-white outline-none"
-                    {...register("collage", {
-                      required: "collage Name is required",
+                    {...register("college", {
+                      required: "college Name is required",
                       minLength: {
                         value: 8,
-                        message: "collage Name must be 8 characters or more",
+                        message: "college Name must be 8 characters or more",
                       },
                       onChange: handleChange,
                       pattern: {
-                        message: "collage is required",
+                        message: "college is required",
                       },
                     })}
                   />
                 </div>
-                {errors.collage && (
+                {errors.college && (
                   <>
                     <p style={{ color: "orangered" }}>
-                      {errors.collage.message}
+                      {errors.college.message}
                     </p>
                   </>
                 )}
